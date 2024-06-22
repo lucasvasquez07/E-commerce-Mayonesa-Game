@@ -1,0 +1,12 @@
+body {
+    background-color: #143d59;
+}
+
+.btn-carrusel:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.card-game:hover {
+    box-shadow: 5px 5px 20px rgba(202, 202, 202, 0.4);
+    transform: translateY(-3%);
+}
