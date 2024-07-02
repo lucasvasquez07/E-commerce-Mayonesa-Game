@@ -1,0 +1,17 @@
+body {
+    background-color: #1B2838;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.sing_in {
+    width: 100%;
+    max-width: 40rem;
+    background-color: #ffc107;
+    padding: 1.5rem;
+    border-radius: 10px;
+}
