@@ -10,10 +10,11 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/estilos.css">
     <link rel="stylesheet" href="./css/navbar_styles.css">
+    <link rel="stylesheet" href="./css/loadLazy.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-warning">
+    <nav class="navbar navbar-expand-lg bg-warning sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#"><img width="200px" src="./img/Logo-Mayonesa-Game.png"
                     alt="Logo de Mayonesa Game"></a>
@@ -89,17 +90,13 @@
     <main class="mt-5 mb-5">
         <div class="container-xxl mt-3">
             <div class="container container-games">
-                <div class="row">
-                    <div class="col mt-3">
-                        <div class="card-game">
-                            <a href="#">
-                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/976730/header.jpg?t=1670458602"
-                                    class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <p class="fs-2 text-card">Title</p>
-                                    <p class="fs-6 text-card">price</p>
-                                </div>
-                            </a>
+                <div class="" id="list_games_home">
+                    <div class="container-spinner">
+                        <div class='container-spinner-card'>
+                            <div>
+                                <h2 class='textLoading'>Loading...</h2>
+                            </div>
+                            <div class='spinner'></div>
                         </div>
                     </div>
                 </div>
@@ -112,6 +109,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script src="./js/index.js"></script>
 </body>
 
 </html>

@@ -24,27 +24,52 @@ body {
 
 }
 
+
+#list_games_home {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
+    grid-gap: 1rem;
+    justify-items: center;
+}
+
 .card-game {
-    max-width: 18rem;
+    width: 18rem;
     border-radius: 10px;
 }
 
-.card-game:hover {
-    transform: scale(1.05);
-}
 
 .card-game a {
     text-decoration: none;
 }
 
-.card-game img {
-    border-radius: 10px;
+.card-game:hover {
+    img {
+        transform: scale(1.05);
+    }
+}
+
+.card-game .card-body div {
+    display: flex;
+    justify-content: center;
 }
 
 .text-card {
-    color: white;
-
+    text-align: center;
+    padding: 0.1rem 2rem;
+    display: inline-block;
+    margin: 0;
 }
+
+.text-card-title {
+    color: white;
+    background-color: #2A475E;
+}
+
+.text-card-price {
+    color: green;
+    background-color: #A1CD44;
+}
+
 
 .text-footer {
     color: white;

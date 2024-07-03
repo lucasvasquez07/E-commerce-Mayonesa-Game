@@ -1,0 +1,54 @@
+.container-spinner {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.container-spinner-card {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.textLoading {
+    color: white;
+    display: block;
+    font-family: monospace;
+    white-space: nowrap;
+    width: 10ch;
+    animation: typing 2s steps(10), blink 2s infinite step-end alternate;
+    overflow: hidden;
+}
+
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+.spinner {
+    border: 20px solid rgba(255, 255, 255, 0.1);
+    width: 15rem;
+    height: 15rem;
+    border-radius: 50%;
+    border-left-color: #09f;
+    animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
