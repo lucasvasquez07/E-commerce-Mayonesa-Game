@@ -106,7 +106,7 @@ def get_game_by_name(nombre_recibido):
                     "id": juego.id,
                     "fecha_de_adicion": juego.date,
                     "nombre": juego.name,
-                    "precio": juego.prece,
+                    "precio": juego.price,
                     "descripcion": juego.description,
                     "categoria": juego.category,
                     "imagen": juego.image
