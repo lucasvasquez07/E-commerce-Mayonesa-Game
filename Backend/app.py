@@ -1,6 +1,6 @@
 #  END POINTS
 # #endpoint games
-# -get_all_game *
+# -get_all_games *
 # -get_by_categoria*
 # -get_by_id_game *
 # -get_game_by_name 
