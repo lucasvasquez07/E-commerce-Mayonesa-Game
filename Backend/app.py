@@ -17,10 +17,12 @@
 # -get_games_by_id_user
 
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, 
 from models import db, Usuario, Juego, JuegoUsuario
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 port = 5000
 app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://postgre:postgre@localhost:5432/mayonesa'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
@@ -78,18 +80,20 @@ def get_by_categoria(categoria):
     try:
         juegos = Juego.query.filter(Juego.category==categoria).all()
         juegos_data = []
-        for juego in juegos:
-            juego_data = {
-                "id": juego.id,
-                "fecha_de_adición": juego.date,
-                "nombre": juego.name,
-                "precio": juego.price,
+        if juegos:
+            for juego in juegos:
+                juego_data = {
+                    "id": juego.id,
+                    "fecha_de_adición": juego.date,
+                    "nombre": juego.name,
+                    "precio": juego.price,
                 "descripcion": juego.description,
                 "categoria": juego.category,
                 "imagen": juego.image
-            }
-            juegos_data.append(juego_data)
-        return jsonify({"juegos": juegos_data})
+                }
+            return jsonify({"juego": juego_data})
+        else:
+            return jsonify({"message": "No se encontraron juegos"}), 204
     except Exception as error:
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 404
@@ -137,6 +141,18 @@ def get_user_by_id(id_usuario):
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 404
 
+
+@app.route("/usuarios/<id_usuario>", methods=["POST"])
+def post_user_sing_in():
+    try:
+        name = data.get('nombre')
+        password = data.get('contraseña')
+        mail = data.get('correo')
+        data = request.json
+        nuevo_usuario = Usuario(name=name, password=password, mail=mail, date="NOW()")
+        db.session.add(nuevo_usuario)
+        db.session.commit()
+    except:
 
 def similitud_nombre(nombre_de_juego, nombre_recibido):
     i = 0
