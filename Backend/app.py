@@ -18,13 +18,12 @@
 
 
 from flask import Flask, request, jsonify
-from models import db, Usuarios, Juegos, JuegosUsuarios
+from models import db, Usuario, Juego, JuegoUsuario
 
 app = Flask(__name__)
 port = 5000
 app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://postgre:postgre@localhost:5432/mayonesa'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
-
 db.init_app(app)
 
 @app.route('/')
@@ -35,17 +34,17 @@ def hello_world():
 @app.route("/juegos", methods=["GET"])
 def get_all_games():
     try:
-        juegos = Juegos.query.all()
+        juegos = Juego.query.all()
         juegos_data = []
         for juego in juegos:
             juego_data = {
                 "id": juego.id,
-                "fecha_de_adicion": juego.fecha_de_adicion,
-                "nombre": juego.nombre_de_juego,
-                "precio": juego.precio,
-                "descripcion": juego.descripcion,
-                "categoria": juego.categoria,
-                "imagen": juego.imagen
+                "fecha_de_adicion": juego.date,
+                "nombre": juego.name,
+                "precio": juego.price,
+                "descripcion": juego.description,
+                "categoria": juego.category,
+                "imagen": juego.image
             }
             juegos_data.append(juego_data)
         return jsonify({"juegos": juegos_data})
@@ -53,19 +52,19 @@ def get_all_games():
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 500
 
-@app.route("/juegos/<id_juego>", methods=["GET"])
+@app.route("/juego/<id_juego>", methods=["GET"])
 def get_by_id_game(id_juego):
     try:
-        juego = Juegos.query.get(int(id_juego))
+        juego = Juego.query.get(int(id_juego))
         if juego:
             juego_data = {
                 "id": juego.id,
-                "fecha_de_adicion": juego.fecha_de_adicion,
-                "nombre": juego.nombre_de_juego,
-                "precio": juego.precio,
-                "descripcion": juego.descripcion,
-                "categoria": juego.categoria,
-                "imagen": juego.imagen
+                "fecha_de_adicion": juego.date,
+                "nombre": juego.name,
+                "precio": juego.price,
+                "descripcion": juego.description,
+                "categoria": juego.category,
+                "imagen": juego.image
             }
             return jsonify({"juego": juego_data})
         else:
@@ -77,40 +76,40 @@ def get_by_id_game(id_juego):
 @app.route("/juegos/<categoria>", methods=["GET"])
 def get_by_categoria(categoria):
     try:
-        juegos = Juegos.query.filter(Juegos.categoria == categoria).all()
+        juegos = Juego.query.filter(Juego.category==categoria).all()
         juegos_data = []
         for juego in juegos:
             juego_data = {
                 "id": juego.id,
-                "fecha_de_adicion": juego.fecha_de_adicion,
-                "nombre": juego.nombre_de_juego,
-                "precio": juego.precio,
-                "descripcion": juego.descripcion,
-                "categoria": juego.categoria,
-                "imagen": juego.imagen
+                "fecha_de_adición": juego.date,
+                "nombre": juego.name,
+                "precio": juego.price,
+                "descripcion": juego.description,
+                "categoria": juego.category,
+                "imagen": juego.image
             }
             juegos_data.append(juego_data)
         return jsonify({"juegos": juegos_data})
     except Exception as error:
         print("Error", error)
-        return jsonify({"message": "Internal server error"}), 500
+        return jsonify({"message": "Internal server error"}), 404
 
 
 @app.route("/juegos/search", methods=["GET"])
 def get_game_by_name(nombre_recibido):
     try:
-        juegos = Juegos.query.all()
+        juegos = Juego.query.all()
         juegos_data = []
         for juego in juegos:
             if similitud_nombre(juego.nombre_de_juego, nombre_recibido):
                 juego_data = {
                     "id": juego.id,
-                    "fecha_de_adicion": juego.fecha_de_adicion,
-                    "nombre": juego.nombre_de_juego,
-                    "precio": juego.precio,
-                    "descripcion": juego.descripcion,
-                    "categoria": juego.categoria,
-                    "imagen": juego.imagen
+                    "fecha_de_adicion": juego.date,
+                    "nombre": juego.name,
+                    "precio": juego.prece,
+                    "descripcion": juego.description,
+                    "categoria": juego.category,
+                    "imagen": juego.image
                 }
                 juegos_data.append(juego_data)
         return jsonify({"juegos": juegos_data})
@@ -122,14 +121,14 @@ def get_game_by_name(nombre_recibido):
 @app.route("/usuarios/<id_usuario>", methods=["GET"])
 def get_user_by_id(id_usuario):
     try:
-        usuario = Usuarios.query.get(int(id_usuario))
+        usuario = Usuario.query.get(int(id_usuario))
         if usuario:
             usuario_data = {
                 "id": usuario.id,
-                "fecha_de_creacion": usuario.fecha_de_creacion,
+                "fecha_de_creacion": usuario.date,
                 "nombre": usuario.name,
-                "password": usuario.pasword,
-                "correo": usuario.correo
+                "password": usuario.password,
+                "correo": usuario.mail
             }
             return jsonify({"usuario": usuario_data})
         else:
