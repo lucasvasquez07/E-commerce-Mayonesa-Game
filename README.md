@@ -16,7 +16,7 @@ pip install -r Backend/requirements.txt
 
 ```bash
 source venv/bin/activate
-cd backend
+cd Backend
 flask run --debug
 ```
 
