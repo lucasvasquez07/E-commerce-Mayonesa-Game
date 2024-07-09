@@ -6,21 +6,20 @@
 # -get_game_by_name*
 
 # #endpoint user
-# -get_user_by_login
+# -get_user_by_login*
 # -get_user_by_id*
 # -post_user_sign_in*
-# -put_user_update
-# -del_user
+# -put_user_update*
+# -del_user*
 
 # #endpoint games_buys
-# -post_game_buy
-# -get_games_by_id_user
+# -post_game_buy*
+# -get_games_by_id_user*
 
 
 from flask import Flask, request, jsonify
 from models import db, Usuario, Juego, JuegoUsuario
 from flask_cors import CORS
-import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -55,7 +54,7 @@ def get_all_games():
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 500
 
-@app.route("/juego/<id_juego>", methods=["GET"])
+@app.route("/juegos/id/<id_juego>", methods=["GET"])
 def get_by_id_game(id_juego):
     try:
         juego = Juego.query.get(int(id_juego))
@@ -76,7 +75,7 @@ def get_by_id_game(id_juego):
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 404
     
-@app.route("/juegos/<categoria>", methods=["GET"])
+@app.route("/juegos/categoria/<categoria>", methods=["GET"])
 def get_by_categoria(categoria):
     try:
         juegos = Juego.query.filter(Juego.category==categoria).all()
@@ -99,8 +98,7 @@ def get_by_categoria(categoria):
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 404
 
-
-@app.route("/juegos/search", methods=["POST"])
+@app.route("/juegos/search", methods=["GET"])
 def get_game_by_name():
     try:
         data=request.json
@@ -125,7 +123,36 @@ def get_game_by_name():
         return jsonify({"message": "Internal server error"}), 500
 
 
-@app.route("/usuarios/<id_usuario>", methods=["GET"])
+@app.route("/usuario/log_in", methods=["GET"])
+def get_user_by_log_in():
+    try:
+        data = request.json
+
+        name = data.get('name')
+        password = data.get('password')
+
+        if "@" in name:
+            usuario = Usuario.query.filter(Usuario.mail == name, Usuario.password == password).first()
+        else:
+            usuario = Usuario.query.filter(Usuario.name == name, Usuario.password == password).first()
+
+        if usuario:
+            usuario_data = {
+                "id": usuario.id,
+                "fecha_de_creacion": usuario.date,
+                "nombre": usuario.name,
+                "correo": usuario.mail
+            }
+        else:
+            return jsonify({"message": "ERROR. Alguno de los datos ingresados es incorrecto"})
+
+        return jsonify({"Usuario": usuario_data})
+    except:
+        return jsonify({"message": "ERROR. Alguno de los datos ingresados es incorrecto."})
+
+
+
+@app.route("/usuarios/id/<id_usuario>", methods=["GET"])
 def get_user_by_id(id_usuario):
     try:
         usuario = Usuario.query.get(int(id_usuario))
@@ -146,7 +173,7 @@ def get_user_by_id(id_usuario):
 
 
 @app.route("/sign_in", methods=["POST"])
-def post_user_sing_in():
+def post_user_sign_in():
     try:
         data = request.json
 
@@ -154,6 +181,12 @@ def post_user_sing_in():
         password = data.get('password')
         mail = data.get('mail')
 
+        if "@" not in mail:
+            return jsonify({"ERROR": "El mail no es valido"})
+        
+        if "@" in name:
+            return jsonify({"ERROR": "El nombre no puede contener un @"})
+        
         nuevo_usuario = Usuario(name=name, password=password, mail=mail)
 
         db.session.add(nuevo_usuario)
@@ -162,6 +195,8 @@ def post_user_sing_in():
         return jsonify({"id": nuevo_usuario.id,"name" : nuevo_usuario.name,"correo" : nuevo_usuario.mail, "fecha de creacion": nuevo_usuario.date })
     except:
         return jsonify({"message": "ERROR. No se pudo guardar el usuario "})
+    
+
 
 def similitud_nombre(nombre_de_juego, nombre_recibido):
     i = 0
