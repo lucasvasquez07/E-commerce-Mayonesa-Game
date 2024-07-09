@@ -100,13 +100,15 @@ def get_by_categoria(categoria):
         return jsonify({"message": "Internal server error"}), 404
 
 
-@app.route("/juegos/search", methods=["GET"])
-def get_game_by_name(nombre_recibido):
+@app.route("/juegos/search", methods=["POST"])
+def get_game_by_name():
     try:
+        data=request.json
+        nombre_recibido = data.get("name")
         juegos = Juego.query.all()
         juegos_data = []
         for juego in juegos:
-            if similitud_nombre(juego.nombre_de_juego, nombre_recibido):
+            if similitud_nombre(juego.name, nombre_recibido):
                 juego_data = {
                     "id": juego.id,
                     "fecha_de_adicion": juego.date,
