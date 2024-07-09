@@ -25,3 +25,10 @@ export function get_by_search(name) {
         .then(response => response.json().then(data => data))
         .catch(err => console.log(err))
 }
+
+export function get_by_email(email) {
+    const url = "../usuarios.json?email=" + email;
+    return fetch(url)
+        .then(response => response.json().then(data => data))
+        .catch(err => console.log(err))
+}

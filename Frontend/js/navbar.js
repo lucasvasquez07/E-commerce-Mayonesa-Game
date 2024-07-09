@@ -11,7 +11,7 @@ window.addEventListener("load", () => {
 const btn_search = document.getElementById("btn-search")
 
 btn_search.addEventListener("click", (e) => {
-    e.preventDefault
+    e.preventDefault()
     const search_data = document.getElementById("input-search").value
     window.location.href = "./search.html?search=" + search_data;
 })

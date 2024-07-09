@@ -1,9 +1,15 @@
-import { get_by_category } from "./metodos_juegos.js"
+import { get_by_category } from "./metodos_backend.js"
 import { create_template_card_game } from "./templates.js"
+
+function show_category(categoria) {
+    const title_category = document.getElementById("t-category")
+    title_category.innerText = `Categoria: ${categoria}`
+}
 
 async function get_category_game() {
     const params = new URLSearchParams(window.location.search);
     const categoria = params.get("categoria");
+    show_category(categoria)
     const videojuegos = await get_by_category()
     const new_category_games = videojuegos.filter(juego => juego.genero.split(",").find(genero => genero == categoria))
     return new_category_games

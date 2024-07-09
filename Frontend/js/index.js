@@ -1,4 +1,4 @@
-import { get_all_games } from "./metodos_juegos.js"
+import { get_all_games } from "./metodos_backend.js"
 import { create_template_card_game } from "./templates.js"
 
 window.addEventListener("load", async () => {
