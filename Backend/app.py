@@ -8,7 +8,7 @@
 # #endpoint user
 # -get_user_by_login
 # -get_user_by_id*
-# -post_user_sing_in
+# -post_user_sing_in*
 # -put_user_update
 # -del_user
 
@@ -20,6 +20,7 @@
 from flask import Flask, request, jsonify
 from models import db, Usuario, Juego, JuegoUsuario
 from flask_cors import CORS
+import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -142,17 +143,23 @@ def get_user_by_id(id_usuario):
         return jsonify({"message": "Internal server error"}), 404
 
 
-# @app.route("/usuarios/<id_usuario>", methods=["POST"])
-# def post_user_sing_in():
-#     try:
-#         name = data.get('nombre')
-#         password = data.get('contraseña')
-#         mail = data.get('correo')
-#         data = request.json
-#         nuevo_usuario = Usuario(name=name, password=password, mail=mail, date="NOW()")
-#         db.session.add(nuevo_usuario)
-#         db.session.commit()
-#     except:
+@app.route("/usuario", methods=["POST"])
+def post_user_sing_in():
+    try:
+        data = request.json
+
+        name = data.get('name')
+        password = data.get('password')
+        mail = data.get('mail')
+
+        nuevo_usuario = Usuario(name=name, password=password, mail=mail)
+
+        db.session.add(nuevo_usuario)
+        db.session.commit()
+
+        return jsonify({"id": nuevo_usuario.id,"name" : nuevo_usuario.name,"correo" : nuevo_usuario.mail, "fecha de creacion": nuevo_usuario.date })
+    except:
+        return jsonify({"message": "ERROR. No se pudo guardar el usuario "})
 
 def similitud_nombre(nombre_de_juego, nombre_recibido):
     i = 0
