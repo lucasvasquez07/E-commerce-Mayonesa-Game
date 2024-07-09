@@ -3,12 +3,12 @@
 # -get_all_games *
 # -get_by_categoria*
 # -get_by_id_game *
-# -get_game_by_name 
+# -get_game_by_name*
 
 # #endpoint user
 # -get_user_by_login
 # -get_user_by_id*
-# -post_user_sing_in*
+# -post_user_sign_in*
 # -put_user_update
 # -del_user
 
@@ -145,7 +145,7 @@ def get_user_by_id(id_usuario):
         return jsonify({"message": "Internal server error"}), 404
 
 
-@app.route("/usuario", methods=["POST"])
+@app.route("/sign_in", methods=["POST"])
 def post_user_sing_in():
     try:
         data = request.json
