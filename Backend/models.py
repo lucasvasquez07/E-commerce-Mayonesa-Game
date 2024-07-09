@@ -18,7 +18,7 @@ class Juego(db.Model):  # Nombres de clases en singular y en mayúscula por conv
     name = db.Column(db.String(63), nullable=False)
     price = db.Column(db.Integer)
     description = db.Column(db.String(255))
-    category = db.Column(db.String(15))
+    category = db.Column(db.String(255))
     image = db.Column(db.String(255))
 
 class JuegoUsuario(db.Model):  # Nombres de clases en singular y en mayúscula por convención
