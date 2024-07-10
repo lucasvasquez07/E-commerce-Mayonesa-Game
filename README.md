@@ -22,13 +22,13 @@ flask run --debug
 
 ### Create Date Base
 
-'''bash
+```bash
 sudo -u postgres psql
 CREATE USER postgre WITH PASSWORD 'postgre';
 ALTER USER postgre CREATEDB;
 CREATE DATABASE mayonesa OWNER postgre;
 \q
-'''
+```
 
 ## Autores ✒️
 
