@@ -187,20 +187,42 @@ def post_user_sign_in():
         password = data.get('password')
         mail = data.get('mail')
 
-        if "@" not in mail:
-            return jsonify({"ERROR": "El mail no es valido"})
-        
-        if "@" in name:
-            return jsonify({"ERROR": "El nombre no puede contener un @"})
-        
-        nuevo_usuario = Usuario(name=name, password=password, mail=mail)
+        # Validaciones básicas
+        if not name or not password or not mail:
+            return jsonify({"ERROR": "Faltan datos obligatorios."}), 400
 
+        if "@" not in mail:
+            return jsonify({"ERROR": "El correo no es válido."}), 400
+
+        if "@" in name:
+            return jsonify({"ERROR": "El nombre no puede contener un @."}), 400
+
+        # Verifica si el nombre de usuario ya existe
+        usuario_nombre = Usuario.query.filter(Usuario.name == name).first()
+        if usuario_nombre:
+            return jsonify({"ERROR": "El nombre del usuario ya existe."}), 409
+
+        # Verifica si el correo ya está vinculado a otra cuenta
+        usuario_correo = Usuario.query.filter(Usuario.mail == mail).first()
+        if usuario_correo:
+            return jsonify({"ERROR": "El correo ya está vinculado a otra cuenta."}), 409
+
+        # Crea el nuevo usuario
+        nuevo_usuario = Usuario(name=name, password=password, mail=mail)
         db.session.add(nuevo_usuario)
         db.session.commit()
 
-        return jsonify({"id": nuevo_usuario.id,"name" : nuevo_usuario.name,"correo" : nuevo_usuario.mail, "fecha de creacion": nuevo_usuario.date })
-    except:
-        return jsonify({"message": "ERROR. No se pudo guardar el usuario "})
+        return jsonify({
+            "id": nuevo_usuario.id,
+            "name": nuevo_usuario.name,
+            "correo": nuevo_usuario.mail,
+            "fecha_de_creacion": nuevo_usuario.date
+        }), 201
+
+    except Exception as error:
+        print("Error:", error)
+        return jsonify({"message": "ERROR. No se pudo guardar el usuario."}), 500
+
     
 @app.route("/data_user/<int:id_usuario>", methods=["PUT"]) #Actualizo el nombre de usuario
 def put_user_update(id_usuario):
