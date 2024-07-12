@@ -27,3 +27,21 @@ export function template_li_list_category(categoria) {
     return `<li><a class="dropdown-item " href="./category.html?categoria=${categoria}">${categoria_Capitalizado}</a>
     </li>`
 }
+
+export function template_login_user_data(data_user) {
+    return `<li class="nav-item">
+    <a class="nav-link" href="./data_user.html?id_user=${data_user.id}">${data_user.name}</a>
+</li>
+<li class="nav-item">
+    <button class="nav-link" >Log out</button>
+</li>`
+}
+
+export function template_login_sing() {
+    return `<li class="nav-item">
+    <a class="nav-link" href="./login.html">Login</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="./sing_in.html">Sing in</a>
+</li>`
+}

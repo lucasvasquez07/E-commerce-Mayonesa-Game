@@ -1,3 +1,5 @@
+//Archivo Js para la pagina de categoria
+
 import { get_by_category } from "./metodos_backend.js"
 import { create_template_card_game } from "./templates.js"
 

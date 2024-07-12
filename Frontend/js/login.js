@@ -1,10 +1,13 @@
-import { get_by_email } from "./metodos_backend.js"
+//Archivo Js para la pagina de login
 
+import { get_by_email } from "./metodos_backend.js"
+//funcion que obtiene el input de password y le cambia el tipo
 function change_input_pw(type_pw_input) {
     const input_pw_login = document.getElementById("pw-login")
     input_pw_login.type = type_pw_input
 }
 
+//evento de boton de mostrar la contraseña
 const btn_pw = document.getElementById("btn-pw")
 btn_pw.addEventListener('click', (event) => {
     event.preventDefault()
@@ -18,6 +21,7 @@ btn_pw.addEventListener('click', (event) => {
     }
 })
 
+//obtiene los valores de los input
 function get_values_form_login() {
     const email = document.getElementById("email-login").value
     const password = document.getElementById("pw-login").value
@@ -25,20 +29,46 @@ function get_values_form_login() {
     return data
 }
 
+// obtiene
 async function verify_user(user_data) {
     const users = await get_by_email()
-    const user_find = users.find(user => user.email == user_data.email && user.password == user_data.password)
+    let user_find = users.find(user => user.email == user_data.email && user.password == user_data.password)
     return user_find
 }
-
+//Evento del boton enviar del formulario login
 const btn_send_login = document.getElementById("btn-send-login")
 btn_send_login.addEventListener("click", async (event) => {
     event.preventDefault()
     const data_user_login = get_values_form_login()
-    const user_find_data = await verify_user(data_user_login)
-    if (user_find_data) {
-        localStorage.setItem("id", user_find_data.id)
+    if (data_user_login.email.length === 0 && data_user_login.password.length === 0) {
+        Swal.fire({
+            title: "Datos incompletos",
+            text: "Rellene todos los campos",
+            icon: "warning",
+            confirmButtonColor: '#ffc107'
+        });
     } else {
-        console.log("usuario error");
+        const user_find_data = await verify_user(data_user_login)
+        console.log(!("message" in user_find_data));
+        if (!("message" in user_find_data)) {
+            const remember_box = document.getElementById("remember-box")
+            if (remember_box.checked) {
+                sessionStorage.removeItem("id")
+                localStorage.setItem("id", user_find_data.id)
+            }
+            else {
+                localStorage.removeItem("id")
+                sessionStorage.setItem("id", user_find_data.id)
+            }
+
+        } else {
+            Swal.fire({
+                title: "Datos Erroneos",
+                text: "El usuario y contraseña son incorrectos",
+                icon: "error",
+                confirmButtonColor: '#DC001A'
+            });
+        }
     }
+
 })

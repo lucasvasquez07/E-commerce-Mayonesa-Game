@@ -1,6 +1,8 @@
+//Archivo Js para la pagina Home
 import { get_all_games } from "./metodos_backend.js"
 import { create_template_card_game } from "./templates.js"
 
+//evento que permite realizar un codigo al cargar la pagina
 window.addEventListener("load", async () => {
     setTimeout(async () => {
         try {

@@ -20,14 +20,12 @@
 from flask import Flask, request, jsonify
 from models import db, Usuario, Juego, JuegoUsuario
 from flask_cors import CORS
-
 app = Flask(__name__)
 CORS(app)
 port = 5000
 app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://postgre:postgre@localhost:5432/mayonesa'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db.init_app(app)
-
 @app.route('/')
 def hello_world():
     return 'Bienvenido a el backend de la pagina de MAYONESA'
@@ -300,7 +298,6 @@ def get_games_by_id_user():
         return jsonify({"message": "Internal server error"}), 500
 
 if __name__ == '__main__':
-    db.init_app(app)
     with app.app_context():
         db.create_all()
     app.run(host='0.0.0.0', debug=True, port=port)
