@@ -32,7 +32,6 @@ db.init_app(app)
 def hello_world():
     return 'Bienvenido a el backend de la pagina de MAYONESA'
 
-
 @app.route("/juegos", methods=["GET"])
 def get_all_games():
     try:
@@ -182,7 +181,6 @@ def get_user_by_id(id_usuario):
 def post_user_sign_in():
     try:
         data = request.json
-
         name = data.get('name')
         password = data.get('password')
         mail = data.get('mail')
@@ -201,23 +199,52 @@ def post_user_sign_in():
         return jsonify({"id": nuevo_usuario.id,"name" : nuevo_usuario.name,"correo" : nuevo_usuario.mail, "fecha de creacion": nuevo_usuario.date })
     except:
         return jsonify({"message": "ERROR. No se pudo guardar el usuario "})
-    
-@app.route("/data_user/<int:id_usuario>", methods=["PUT"]) #Actualizo el nombre de usuario
+
+def email_valido(nuevo_email):
+    if "@" not in nuevo_email:
+        return {"ERROR": "El email no es válido"}
+    return None
+def email_unico(email, id_usuario):
+    existe_email = Usuario.query.filter(Usuario.mail == email, Usuario.id != id_usuario).first()
+    if existe_email:
+        return {"ERROR": "El email ya está en uso"}
+    return None 
+def validar_contraseña(contraseña):
+    if len(contraseña) < 8 or len(contraseña) > 15:
+        return {"ERROR": "La contraseña debe ser entre 8 y 15 caracteres"}
+    return None
+@app.route("/data_user/<int:id_usuario>", methods=["PUT"])  # Actualizo el nombre de usuario, email, y contraseña
 def put_user_update(id_usuario):
     try:
         usuario_actualizar = Usuario.query.get(id_usuario)
-        if(usuario_actualizar):
-            nuevo_nombre_usuario = request.json.get("nuevo_nombre")
-            if(nuevo_nombre_usuario):
-                usuario_actualizar.name = nuevo_nombre_usuario
-                db.session.commit()
-                return jsonify({"message": "Nombre de Usuario actualizado correctamente"}), 200
-            else:
-                return jsonify({"message": "Datos incompletos: se necesita 'nuevo_nombre' en el cuerpo de la solicitud"}), 400
-        else:
+        if not usuario_actualizar:
             return jsonify({"message": "Usuario no encontrado"}), 404
+        nuevo_nombre_usuario = request.json.get("nuevo_nombre")
+        nuevo_email = request.json.get("nuevo_email")
+        nueva_contraseña = request.json.get("nueva_contraseña")
+        if nuevo_nombre_usuario:
+            usuario_existente = Usuario.query.filter(Usuario.name == nuevo_nombre_usuario, Usuario.id != id_usuario).first()
+            if usuario_existente:
+                return jsonify({"message": "Nombre de usuario ya en uso"}), 400
+            usuario_actualizar.name = nuevo_nombre_usuario
+        if nuevo_email:
+            error_email = email_valido(nuevo_email)
+            if error_email:
+                return jsonify(error_email), 400
+            
+            error_email_unico = email_unico(nuevo_email, id_usuario)
+            if error_email_unico:
+                return jsonify(error_email_unico), 400
+            usuario_actualizar.mail = nuevo_email
+        if nueva_contraseña:
+            error_contraseña = validar_contraseña(nueva_contraseña)
+            if error_contraseña:
+                return jsonify(error_contraseña), 400
+            usuario_actualizar.password = nueva_contraseña
+        db.session.commit()
+        return jsonify({"message": "Usuario actualizado correctamente"}), 200
     except Exception as error:
-        print("Error", error)
+        print("Error:", error)
         return jsonify({"message": "Internal server error"}), 500
     
 @app.route("/data_user/<int:id_usuario>", methods=["DELETE"])
