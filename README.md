@@ -20,6 +20,16 @@ cd Backend
 flask run --debug
 ```
 
+### Create Date Base
+
+```bash
+sudo -u postgres psql
+CREATE USER postgre WITH PASSWORD 'postgre';
+ALTER USER postgre CREATEDB;
+CREATE DATABASE mayonesa OWNER postgre;
+\q
+```
+
 ## Autores ✒️
 
 - Almiron Leonardo - Trabajo Cooparticipacion Back-end y Crud de DB - [leonardo256](https://github.com/leonardo256)
