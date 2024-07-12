@@ -78,19 +78,21 @@ def get_by_id_game(id_juego):
 @app.route("/juegos/categoria/<categoria>", methods=["GET"])
 def get_by_categoria(categoria):
     try:
-        juegos = Juego.query.filter(Juego.category==categoria).all()
+        juegos = Juego.query.all()
         juegos_data = []
         if juegos:
             for juego in juegos:
-                juego_data = {
-                    "id": juego.id,
-                    "fecha_de_adición": juego.date,
-                    "nombre": juego.name,
-                    "precio": juego.price,
-                "descripcion": juego.description,
-                "categoria": juego.category,
-                "imagen": juego.image
-                }
+                if categoria in juego.category:
+                    juego_data = {
+                        "id": juego.id,
+                        "fecha_de_adicion": juego.date,
+                        "nombre": juego.name,
+                        "precio": juego.price,
+                    "descripcion": juego.description,
+                    "categoria": juego.category,
+                    "imagen": juego.image
+                    }
+                    juegos_data.append(juegos_data)
             return jsonify({"juego": juego_data})
         else:
             return jsonify({"message": "No se encontraron juegos"}), 204
@@ -106,7 +108,7 @@ def get_game_by_name():
         juegos = Juego.query.all()
         juegos_data = []
         for juego in juegos:
-            if similitud_nombre(juego.name, nombre_recibido):
+            if nombre_recibido in juego.name:
                 juego_data = {
                     "id": juego.id,
                     "fecha_de_adicion": juego.date,
@@ -121,15 +123,6 @@ def get_game_by_name():
     except Exception as error:
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 500
-    
-def similitud_nombre(nombre_de_juego, nombre_recibido):
-    i = 0
-    similar = True
-    while len(nombre_recibido) < len(nombre_de_juego) and i < len(nombre_recibido) and similar:
-        if nombre_de_juego[i] != nombre_recibido[i]:
-            similar = False
-        i+=1
-    return similar
 
 @app.route("/usuario/log_in", methods=["GET"])
 def get_user_by_log_in():
