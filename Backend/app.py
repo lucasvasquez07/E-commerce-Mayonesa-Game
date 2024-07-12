@@ -158,7 +158,6 @@ def get_user_by_id(id_usuario):
                 "id": usuario.id,
                 "fecha_de_creacion": usuario.date,
                 "nombre": usuario.name,
-                "password": usuario.password,
                 "correo": usuario.mail
             }
             return jsonify({"usuario": usuario_data})
