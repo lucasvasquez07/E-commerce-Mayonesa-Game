@@ -212,12 +212,6 @@ def post_user_sign_in():
         print("Error:", error)
         return jsonify({"message": "ERROR. No se pudo guardar el usuario."}), 500
 
-    
-@app.route("/data_user/<int:id_usuario>", methods=["PUT"]) #Actualizo el nombre de usuario
-        return jsonify({"id": nuevo_usuario.id,"name" : nuevo_usuario.name,"correo" : nuevo_usuario.mail, "fecha de creacion": nuevo_usuario.date })
-    except:
-        return jsonify({"message": "ERROR. No se pudo guardar el usuario "})
-
 def email_valido(nuevo_email):
     if "@" not in nuevo_email:
         return {"ERROR": "El email no es válido"}
