@@ -51,7 +51,7 @@ def get_all_games():
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 500
 
-@app.route("/juegos/id/<id_juego>", methods=["GET"])
+@app.route("/juegos/id/<id>", methods=["GET"])
 def get_by_id_game(id_juego):
     try:
         juego = Juego.query.get(int(id_juego))
@@ -105,7 +105,7 @@ def get_game_by_name():
         juegos = Juego.query.all()
         juegos_data = []
         for juego in juegos:
-            if nombre_recibido in juego.name:
+            if nombre_recibido.lower() in juego.name.lower():
                 juego_data = {
                     "id": juego.id,
                     "fecha_de_adicion": juego.date,
@@ -121,18 +121,17 @@ def get_game_by_name():
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 500
 
-@app.route("/usuario/log_in", methods=["GET"])
+@app.route("/usuario/log_in", methods=["POST"])
 def get_user_by_log_in():
     try:
         data = request.json
-
-        name = data.get('name')
+        email = data.get('email')
         password = data.get('password')
 
-        if "@" in name:
-            usuario = Usuario.query.filter(Usuario.mail == name, Usuario.password == password).first()
-        else:
-            usuario = Usuario.query.filter(Usuario.name == name, Usuario.password == password).first()
+        if not email or not password:
+            return jsonify({"message": "ERROR. Faltan datos obligatorios."}), 400
+
+        usuario = Usuario.query.filter((Usuario.mail == email) | (Usuario.name == email), Usuario.password == password).first()
 
         if usuario:
             usuario_data = {
@@ -141,18 +140,19 @@ def get_user_by_log_in():
                 "nombre": usuario.name,
                 "correo": usuario.mail
             }
+            return jsonify({"Usuario": usuario_data}), 200
         else:
-            return jsonify({"message": "ERROR. Alguno de los datos ingresados es incorrecto"})
+            return jsonify({"message": "ERROR. Alguno de los datos ingresados es incorrecto"}), 401
 
-        return jsonify({"Usuario": usuario_data})
-    except:
-        return jsonify({"message": "ERROR. Alguno de los datos ingresados es incorrecto."})
+    except Exception as error:
+        print("Error:", error)
+        return jsonify({"message": "ERROR. No se pudo procesar la solicitud."}), 500
 
 
-@app.route("/usuarios/id/<id_usuario>", methods=["GET"])
+@app.route("/usuarios/id/<int:id_usuario>", methods=["GET"])
 def get_user_by_id(id_usuario):
     try:
-        usuario = Usuario.query.get(int(id_usuario))
+        usuario = Usuario.query.get(id_usuario)
         if usuario:
             usuario_data = {
                 "id": usuario.id,
@@ -160,12 +160,12 @@ def get_user_by_id(id_usuario):
                 "nombre": usuario.name,
                 "correo": usuario.mail
             }
-            return jsonify({"usuario": usuario_data})
+            return jsonify({"usuario": usuario_data}), 200
         else:
-            return jsonify({"message": "Usuario no encontrado"}), 204
+            return jsonify({"message": "Usuario no encontrado"}), 404
     except Exception as error:
-        print("Error", error)
-        return jsonify({"message": "Internal server error"}), 404
+        print("Error:", error)
+        return jsonify({"message": "Internal server error"}), 500
 
 @app.route("/sign_in", methods=["POST"])
 def post_user_sign_in():
@@ -173,13 +173,13 @@ def post_user_sign_in():
         data = request.json
         name = data.get('name')
         password = data.get('password')
-        mail = data.get('mail')
+        email = data.get('email')
 
         # Validaciones básicas
-        if not name or not password or not mail:
+        if not name or not password or not email:
             return jsonify({"ERROR": "Faltan datos obligatorios."}), 400
 
-        if "@" not in mail:
+        if "@" not in email:
             return jsonify({"ERROR": "El correo no es válido."}), 400
 
         if "@" in name:
@@ -191,12 +191,12 @@ def post_user_sign_in():
             return jsonify({"ERROR": "El nombre del usuario ya existe."}), 409
 
         # Verifica si el correo ya está vinculado a otra cuenta
-        usuario_correo = Usuario.query.filter(Usuario.mail == mail).first()
+        usuario_correo = Usuario.query.filter(Usuario.mail == email).first()
         if usuario_correo:
             return jsonify({"ERROR": "El correo ya está vinculado a otra cuenta."}), 409
 
         # Crea el nuevo usuario
-        nuevo_usuario = Usuario(name=name, password=password, mail=mail)
+        nuevo_usuario = Usuario(name=name, password=password, mail=email)
         db.session.add(nuevo_usuario)
         db.session.commit()
 
@@ -211,6 +211,7 @@ def post_user_sign_in():
         print("Error:", error)
         return jsonify({"message": "ERROR. No se pudo guardar el usuario."}), 500
 
+
 def email_valido(nuevo_email):
     if "@" not in nuevo_email:
         return {"ERROR": "El email no es válido"}
@@ -224,10 +225,11 @@ def validar_contraseña(contraseña):
     if len(contraseña) < 8 or len(contraseña) > 15:
         return {"ERROR": "La contraseña debe ser entre 8 y 15 caracteres"}
     return None
+
 @app.route("/data_user/<int:id_usuario>", methods=["PUT"])  # Actualizo el nombre de usuario, email, y contraseña
 def put_user_update(id_usuario):
     try:
-        usuario_actualizar = Usuario.query.get(id_usuario)
+        usuario_actualizar = id_usuario
         if not usuario_actualizar:
             return jsonify({"message": "Usuario no encontrado"}), 404
         nuevo_nombre_usuario = request.json.get("nuevo_nombre")
