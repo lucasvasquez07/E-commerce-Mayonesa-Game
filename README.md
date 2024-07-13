@@ -2,8 +2,11 @@
 
 ## Front-end
 
-## Back-end
+```bash
+python3 -m http.server
+```
 
+## Back-end
 ### Install
 
 ```bash
@@ -20,7 +23,7 @@ cd Backend
 python3 app.py
 ```
 
-### Create Date Base
+## Create Date Base
 
 ```bash
 sudo -u postgres psql
