@@ -85,17 +85,20 @@ def get_by_categoria(categoria):
                         "fecha_de_adicion": juego.date,
                         "nombre": juego.name,
                         "precio": juego.price,
-                    "descripcion": juego.description,
-                    "categoria": juego.category,
-                    "imagen": juego.image
+                        "descripcion": juego.description,
+                        "categoria": juego.category,
+                        "imagen": juego.image
                     }
-                    juegos_data.append(juegos_data)
-            return jsonify({"juego": juego_data})
+                    juegos_data.append(juego_data)
+            if juegos_data:
+                return jsonify({"juegos": juegos_data})
+            else:
+                return jsonify({"message": "No se encontraron juegos en esta categoría"}), 204
         else:
             return jsonify({"message": "No se encontraron juegos"}), 204
     except Exception as error:
         print("Error", error)
-        return jsonify({"message": "Internal server error"}), 404
+        return jsonify({"message": "Internal server error"}), 500
 
 @app.route("/juegos/search", methods=["GET"])
 def get_game_by_name():
@@ -226,7 +229,7 @@ def validar_contraseña(contraseña):
         return {"ERROR": "La contraseña debe ser entre 8 y 15 caracteres"}
     return None
 
-@app.route("/data_user/<int:id_usuario>", methods=["PUT"])  # Actualizo el nombre de usuario, email, y contraseña
+@app.route("/data_user/<int:id_usuario>", methods=["PUT"]) 
 def put_user_update(id_usuario):
     try:
         usuario_actualizar = id_usuario
@@ -275,7 +278,7 @@ def del_user(id_usuario):
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 500
 
-@app.route("/game_buy", methods=["POST"]) #Defino la ruta y es un metodo POST para crear una compra.
+@app.route("/game_buy", methods=["POST"]) 
 def post_game_buy():
     try:
         usuario_compra = request.form.get("user-buy")
@@ -292,11 +295,11 @@ def post_game_buy():
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 500
 
-@app.route("/data_user/user_games", methods=["GET"]) #Defino la ruta y es un meotodo POST para obtener los juegos comprados del usuario.
+@app.route("/data_user/user_games", methods=["GET"]) 
 def get_games_by_id_user():
     try:
         usuario_id = request.args.get("user_id")
-        juegos_comprados = JuegoUsuario.query.filter_by(id_user=usuario_id).all() #Juegos comprados por el usuario
+        juegos_comprados = JuegoUsuario.query.filter_by(id_user=usuario_id).all() 
         lista_juegos = []
         for juego_comprado in juegos_comprados:
             juego = Juego.query.filter_by(id=juego_comprado.id_game).first()

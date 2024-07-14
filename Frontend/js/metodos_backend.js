@@ -6,11 +6,12 @@ export function get_all_games() {
         .catch(err => console.log(err))
 }
 
+// Definir la función get_by_category
 export function get_by_category(categoria) {
     const url = "http://localhost:5000/juegos/categoria/" + categoria;
     return fetch(url)
         .then(response => response.json())
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
 }
 
 export function get_by_id_game(id_game) {
