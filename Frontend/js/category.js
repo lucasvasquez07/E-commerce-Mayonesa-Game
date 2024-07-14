@@ -44,5 +44,5 @@ window.addEventListener("load", async () => {
         category_games.forEach((dict_juego) => {
             row_games.appendChild(create_template_card_game(dict_juego));
         });
-    }, 1500);
+    }, 200);
 });
