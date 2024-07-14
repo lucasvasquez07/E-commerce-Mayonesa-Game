@@ -96,3 +96,61 @@ export function put_user_update(id, data) {
     .then(response => response.json())
     .catch(err => console.log(err));
 }
+
+export function del_user(id) {
+    const url = `http://localhost:5000/data_user/${id}`;
+    return fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();  
+        } else {
+            throw new Error('Network response was not ok');  
+        }
+    })
+    .catch(err => console.error('Fetch error: ', err));  
+}
+
+export function post_game_buy(user_id, game_id) {
+    const url = "http://localhost:5000/game_buy"; 
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'user-buy': user_id,
+            'game-id': game_id
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Network response was not ok');
+        }
+    })
+    .catch(err => console.error('Fetch error: ', err));
+}
+
+export function get_games_by_id_user(user_id) {
+    const url = `http://localhost:5000/data_user/user_games?user_id=${user_id}`;
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'  
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();  
+        } else {
+            throw new Error('Network response was not ok');
+        }
+    })
+    .catch(err => console.error('Fetch error: ', err)); 
+}

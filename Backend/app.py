@@ -275,13 +275,14 @@ def del_user(id_usuario):
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 500
 
-@app.route("/game_buy", methods=["POST"]) #Defino la ruta y es un metodo POST para crear una compra.
+@app.route("/game_buy", methods=["POST"])  # Defino la ruta y es un metodo POST para crear una compra.
 def post_game_buy():
     try:
-        usuario_compra = request.form.get("user-buy")
-        id_juego = request.form.get("game-id")
+        data = request.json  
+        usuario_compra = data.get("user-buy")
+        id_juego = data.get("game-id")
         existe_compra = JuegoUsuario.query.filter(JuegoUsuario.id_game == id_juego, JuegoUsuario.id_user == usuario_compra).first()
-        if(not existe_compra):
+        if not existe_compra:
             nuevo_juego = JuegoUsuario(id_game=id_juego, id_user=usuario_compra)
             db.session.add(nuevo_juego)
             db.session.commit()
