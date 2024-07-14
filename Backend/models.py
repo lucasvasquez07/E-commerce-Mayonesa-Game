@@ -27,5 +27,3 @@ class JuegoUsuario(db.Model):  # Nombres de clases en singular y en mayúscula p
     id_user = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     id_game = db.Column(db.Integer, db.ForeignKey('juegos_en_stock.id'), nullable=False)
     purchase_date = db.Column(db.DateTime, default=datetime.datetime.now)
-
-# Asegúrate de haber definido correctamente la relación entre las tablas si es necesario.
