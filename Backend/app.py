@@ -85,19 +85,20 @@ def get_by_categoria(categoria):
                         "fecha_de_adicion": juego.date,
                         "nombre": juego.name,
                         "precio": juego.price,
-                    "descripcion": juego.description,
-                    "categoria": juego.category,
-                    "imagen": juego.image
+                        "descripcion": juego.description,
+                        "categoria": juego.category,
+                        "imagen": juego.image
                     }
-                    juegos_data.append(juegos_data)
-            return jsonify({"juego": juego_data})
+                    juegos_data.append(juego_data) 
+            return jsonify({"juego": juegos_data})
         else:
             return jsonify({"message": "No se encontraron juegos"}), 204
     except Exception as error:
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 404
 
-@app.route("/juegos/search", methods=["GET"])
+
+@app.route("/juegos/search", methods=["POST"])
 def get_game_by_name():
     try:
         data=request.json

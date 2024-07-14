@@ -1,20 +1,23 @@
-import { get_by_search } from "./metodos_backend.js"
-import { create_template_card_game } from "./templates.js"
+import { get_by_search } from "./metodos_backend.js";
+import { create_template_card_game } from "./templates.js";
 
 async function get_search() {
     const params = new URLSearchParams(window.location.search);
     const search = params.get("search");
-    const videojuegos = await get_by_search()
-    const search_games = videojuegos.filter(juego => juego.nombre.toLowerCase().includes(search.toLowerCase()))
-    return search_games
+    const videojuegos = await get_by_search(search);
+    return videojuegos.juegos; // Asegúrate de extraer la lista de juegos correctamente
 }
+
 window.addEventListener("load", async () => {
-    setTimeout(async () => {
-        const row_games = document.getElementById("list_games_home")
-        row_games.innerHTML = ""
-        const category = await get_search()
-        category.forEach((dict_juego) => {
-            row_games.appendChild(create_template_card_game(dict_juego))
-        })
-    }, 5000)
-})
+    try {
+        const row_games = document.getElementById("list_games_home");
+        row_games.innerHTML = "";
+        
+        const games = await get_search();
+        games.forEach((dict_juego) => {
+            row_games.appendChild(create_template_card_game(dict_juego));
+        });
+    } catch (error) {
+        console.error('Error al procesar juegos obtenidos:', error);
+    }
+});
