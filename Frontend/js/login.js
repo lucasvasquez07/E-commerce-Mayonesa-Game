@@ -43,17 +43,18 @@ btn_send_login.addEventListener("click", async (event) => {
                 confirmButtonColor: '#ffc107'
             });
         } else {
-            const user_find_data = await get_by_email(data_user_login.email, data_user_login.password)
-            if (!("message" in user_find_data)) {
+            const { usuario } = await get_by_email(data_user_login.email, data_user_login.password)
+            if (!("message" in usuario)) {
                 const remember_box = document.getElementById("remember-box")
                 if (remember_box.checked) {
                     sessionStorage.removeItem("id")
-                    localStorage.setItem("id", user_find_data.id)
+                    localStorage.setItem("id", usuario.id)
                 }
                 else {
                     localStorage.removeItem("id")
-                    sessionStorage.setItem("id", user_find_data.id)
+                    sessionStorage.setItem("id", usuario.id)
                 }
+                window.location.href = "./index.html"
             } else {
                 Swal.fire({
                     title: "Datos Erroneos",

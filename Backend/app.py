@@ -139,9 +139,9 @@ def get_user_by_log_in():
                 "id": usuario.id,
                 "fecha_de_creacion": usuario.date,
                 "nombre": usuario.name,
-                "correo": usuario.mail
+                "email": usuario.mail
             }
-            return jsonify({"Usuario": usuario_data}), 200
+            return jsonify({"usuario": usuario_data}), 200
         else:
             return jsonify({"message": "Alguno de los datos ingresados es incorrecto"}), 401
 
@@ -203,14 +203,14 @@ def post_user_sign_in():
 
         return jsonify({
             "id": nuevo_usuario.id,
-            "name": nuevo_usuario.name,
-            "correo": nuevo_usuario.mail,
+            "nombre": nuevo_usuario.name,
+            "email": nuevo_usuario.mail,
             "fecha_de_creacion": nuevo_usuario.date
         }), 201
 
     except Exception as error:
         print("Error:", error)
-        return jsonify({"message": "ERROR. No se pudo guardar el usuario."}), 500
+        return jsonify({"message": "No se pudo guardar el usuario."}), 500
 
 
 def email_valido(nuevo_email):
@@ -312,7 +312,7 @@ def get_games_by_id_user(id_usuario):
                     "imagen": juego.image
                 }
                 lista_juegos.append(juegos_diccionario)                
-        return jsonify({"Juegos comprados": lista_juegos}) , 200  
+        return jsonify({"juegos_comprados": lista_juegos}) , 200  
 
     except Exception as error:
         print("Error", error)

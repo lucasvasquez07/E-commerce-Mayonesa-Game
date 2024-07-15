@@ -33,7 +33,6 @@ function evento_buy_game() {
         });
     } else {
         window.location.href = "./login.html"
-        console.log("redireccionado");
     }
 }
 
