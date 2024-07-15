@@ -20,6 +20,27 @@ export function create_template_card_game(dict_juego) {
     return card_game
 }
 
+export function create_template_card_game_user(juego) {
+    const card_game = document.createElement("div")
+    card_game.classList = "col"
+    const template = `
+        <div class="card-game">
+            <img src="${juego.imagen}" class="card-img-top" alt="...">
+            <div class="card-body ">
+                <div>
+                    <p class="fs-4 text-card text-card-title">${juego.nombre}</p>
+                </div>
+                <div>
+                    <a href="../arhivo_descarga_juego.txt" download="arhivo_descarga_juego.txt">
+                        <p class="fs-6 text-card text-card-btn-download">Descargar</p>
+                    </a>
+                </div>
+            </div>
+        </div>`
+    card_game.innerHTML = template
+    return card_game
+}
+
 export function template_li_list_category(categoria) {
     const primeraLetra = categoria.charAt(0).toUpperCase();
     const restoDelTexto = categoria.slice(1);

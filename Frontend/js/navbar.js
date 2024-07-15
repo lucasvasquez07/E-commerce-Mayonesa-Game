@@ -14,12 +14,15 @@ function show_btn_log_sing() {
     ul_user.innerHTML = template_log_sing
 }
 window.addEventListener("load", async () => {
+    const ele_li_librery = document.getElementById("my-libreria-link")
     const lista_categorias = ["accion", "aventura", "deportes", "fantasia", "multijugador", "samurais"]
     lista_categorias.forEach(categoria => {
         const element_list_category = document.getElementById("lista_categorias")
         element_list_category.innerHTML += template_li_list_category(categoria)
     })
     if (localStorage.getItem("id") || sessionStorage.getItem("id")) {
+        const id_user = localStorage.getItem("id") ? localStorage.getItem("id") : sessionStorage.getItem("id")
+        ele_li_librery.href = "./library.html?id_user=" + id_user
         await show_sesion()
         const btn_log_out = document.getElementById("btn-log-out")
         btn_log_out.addEventListener("click", () => {
@@ -28,6 +31,7 @@ window.addEventListener("load", async () => {
             window.location.href = "./index.html"
         })
     } else {
+        ele_li_librery.href = "./login.html"
         show_btn_log_sing()
     }
 })
