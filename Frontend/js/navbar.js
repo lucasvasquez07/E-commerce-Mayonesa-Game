@@ -1,14 +1,12 @@
+import { get_user_by_id } from "./metodos_backend.js"
 import { template_li_list_category, template_login_sing, template_login_user_data } from "./templates.js"
 
-function show_sesion() {
-    const get_data_user = {
-        id: 1,
-        email: "lucas@gmail.com",
-        date: "2024/07/08",
-        name: "Lucas Vasquez"
-    }
+async function show_sesion() {
+    const id_user = localStorage.getItem("id") ? localStorage.getItem("id") : sessionStorage.getItem("id")
+    const { usuario } = await get_user_by_id(id_user)
+    console.log(usuario);
     const ul_user = document.getElementById("ul-sesion")
-    const template_user = template_login_user_data(get_data_user)
+    const template_user = template_login_user_data(usuario)
     ul_user.innerHTML = template_user
 }
 function show_btn_log_sing() {
@@ -17,13 +15,17 @@ function show_btn_log_sing() {
     ul_user.innerHTML = template_log_sing
 }
 window.addEventListener("load", () => {
-    const lista_categorias = ["accion", "aventura", "deportes", "fantasia", "multijugador", "shooter"]
+    const lista_categorias = ["accion", "aventura", "deportes", "fantasia", "multijugador", "samurais"]
     lista_categorias.forEach(categoria => {
         const element_list_category = document.getElementById("lista_categorias")
         element_list_category.innerHTML += template_li_list_category(categoria)
     })
     if (localStorage.getItem("id") || sessionStorage.getItem("id")) {
         show_sesion()
+        const btn_log_out = document.getElementById("btn-log-out")
+        btn_log_out.addEventListener("click", () => {
+            window.location.href = "./index.html"
+        })
     } else {
         show_btn_log_sing()
     }

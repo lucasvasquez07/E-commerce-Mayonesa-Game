@@ -1,24 +1,65 @@
-
 export function get_all_games() {
     const url = "http://localhost:5000/juegos";
     return fetch(url)
-        .then(response => response.json())
-        .catch(err => console.log(err))
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error["message"])
+            }
+            return response.json()
+        })
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }
 
 export function get_by_category(categoria) {
     const url = "http://localhost:5000/juegos/categoria/" + encodeURIComponent(categoria);
     return fetch(url)
-        .then(response => response.json())
-        .catch(err => console.log(err));
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error["message"])
+            }
+            return response.json()
+        })
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }
 
 
 export function get_by_id_game(id_game) {
     const url = "http://localhost:5000/juegos/id/" + id_game;
     return fetch(url)
-        .then(response => response.json())
-        .catch(err => console.log(err))
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error["message"])
+            }
+            return response.json()
+        })
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }
 
 export function get_by_search(name) {
@@ -30,8 +71,22 @@ export function get_by_search(name) {
         },
         body: JSON.stringify({ name: name })
     })
-    .then(response => response.json())
-    .catch(err => console.log(err));
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error["message"])
+            }
+            return response.json()
+        })
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }
 
 
@@ -44,31 +99,49 @@ export function get_by_email(email, password) {
         },
         body: JSON.stringify({ email: email, password: password })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .catch(err => console.log('Fetch error: ', err));
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error["message"])
+            }
+            return response.json()
+        })
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }
 
 
 export function get_user_by_id(id) {
     const url = "http://localhost:5000/usuarios/id/" + id;
     return fetch(url)
-        .then(response => {
+        .then(async response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
+                const error = await response.json()
+                throw new Error(error["message"])
             }
             return response.json();
         })
-        .catch(err => console.log('Fetch error: ', err));
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }
 
- 
+
 export function post_user_sign_in(email, password, name) {
-    const url = "http://localhost:5000/sign_in";
+    const url = "http://localhost:5000/sign_in"
     return fetch(url, {
         method: 'POST',
         headers: {
@@ -76,18 +149,27 @@ export function post_user_sign_in(email, password, name) {
         },
         body: JSON.stringify({ email: email, password: password, name: name })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .catch(err => console.log('Fetch error: ', err));
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error["message"])
+            }
+            return response.json()
+        })
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }
 
 
 export function put_user_update(id, data) {
-    const url = "http://localhost:5000/data_user/" + id;
+    const url = "http://localhost:5000/data_user/" + id
     return fetch(url, {
         method: 'PUT',
         headers: {
@@ -95,30 +177,52 @@ export function put_user_update(id, data) {
         },
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .catch(err => console.log(err));
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error["message"])
+            }
+            return response.json()
+        })
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }
 
 export function del_user(id) {
-    const url = `http://localhost:5000/data_user/${id}`;
+    const url = `http://localhost:5000/data_user/${id}`
     return fetch(url, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
         },
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();  
-        } else {
-            throw new Error('Network response was not ok');  
-        }
-    })
-    .catch(err => console.error('Fetch error: ', err));  
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error["message"])
+            }
+            return response.json()
+        })
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }
 
 export function post_game_buy(user_id, game_id) {
-    const url = "http://localhost:5000/game_buy"; 
+    const url = "http://localhost:5000/game_buy"
     return fetch(url, {
         method: 'POST',
         headers: {
@@ -129,30 +233,46 @@ export function post_game_buy(user_id, game_id) {
             'game-id': game_id
         })
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Network response was not ok');
-        }
-    })
-    .catch(err => console.error('Fetch error: ', err));
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error["message"])
+            }
+            return response.json()
+        })
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }
 
 export function get_games_by_id_user(user_id) {
-    const url = `http://localhost:5000/data_user/user_games?user_id=${user_id}`;
+    const url = `http://localhost:5000/data_user/user_games/${user_id}`
     return fetch(url, {
         method: 'GET',
         headers: {
-            'Accept': 'application/json'  
+            'Accept': 'application/json'
         },
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();  
-        } else {
-            throw new Error('Network response was not ok');
-        }
-    })
-    .catch(err => console.error('Fetch error: ', err)); 
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(error["message"])
+            }
+            return response.json()
+        })
+        .catch(err => {
+            if (!(err instanceof TypeError && err.message === 'Failed to fetch')) {
+                Swal.fire({
+                    title: err,
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                })
+            }
+        })
 }

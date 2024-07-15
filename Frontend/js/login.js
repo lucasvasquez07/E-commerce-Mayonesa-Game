@@ -29,46 +29,46 @@ function get_values_form_login() {
     return data
 }
 
-// obtiene
-async function verify_user(user_data) {
-    const users = await get_by_email()
-    let user_find = users.find(user => user.email == user_data.email && user.password == user_data.password)
-    return user_find
-}
 //Evento del boton enviar del formulario login
 const btn_send_login = document.getElementById("btn-send-login")
 btn_send_login.addEventListener("click", async (event) => {
     event.preventDefault()
     const data_user_login = get_values_form_login()
-    if (data_user_login.email.length === 0 && data_user_login.password.length === 0) {
-        Swal.fire({
-            title: "Datos incompletos",
-            text: "Rellene todos los campos",
-            icon: "warning",
-            confirmButtonColor: '#ffc107'
-        });
-    } else {
-        const user_find_data = await verify_user(data_user_login)
-        console.log(!("message" in user_find_data));
-        if (!("message" in user_find_data)) {
-            const remember_box = document.getElementById("remember-box")
-            if (remember_box.checked) {
-                sessionStorage.removeItem("id")
-                localStorage.setItem("id", user_find_data.id)
-            }
-            else {
-                localStorage.removeItem("id")
-                sessionStorage.setItem("id", user_find_data.id)
-            }
-
-        } else {
+    try {
+        if (data_user_login.email.length === 0 || data_user_login.password.length === 0) {
             Swal.fire({
-                title: "Datos Erroneos",
-                text: "El usuario y contraseña son incorrectos",
-                icon: "error",
-                confirmButtonColor: '#DC001A'
+                title: "Datos incompletos",
+                text: "Rellene todos los campos",
+                icon: "warning",
+                confirmButtonColor: '#ffc107'
             });
+        } else {
+            const user_find_data = await get_by_email(data_user_login.email, data_user_login.password)
+            if (!("message" in user_find_data)) {
+                const remember_box = document.getElementById("remember-box")
+                if (remember_box.checked) {
+                    sessionStorage.removeItem("id")
+                    localStorage.setItem("id", user_find_data.id)
+                }
+                else {
+                    localStorage.removeItem("id")
+                    sessionStorage.setItem("id", user_find_data.id)
+                }
+            } else {
+                Swal.fire({
+                    title: "Datos Erroneos",
+                    text: "El usuario y contraseña son incorrectos",
+                    icon: "error",
+                    confirmButtonColor: '#DC001A'
+                });
+            }
         }
+    } catch (error) {
+        Swal.fire({
+            title: "Error del servidor",
+            text: "El servidor no esta funcionando correctamente",
+            icon: "error",
+            confirmButtonColor: '#DC001A'
+        });
     }
-
 })

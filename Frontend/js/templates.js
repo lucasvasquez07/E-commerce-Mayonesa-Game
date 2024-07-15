@@ -3,7 +3,7 @@ export function create_template_card_game(dict_juego) {
     card_game.classList = "col"
     const template = `
         <div class="card-game">
-            <a href="#${dict_juego.id}">
+            <a href="./game.html?id_game=${dict_juego.id}">
                 <img src="${dict_juego.imagen}"
                     class="card-img-top" alt="...">
                 <div class="card-body ">
@@ -30,10 +30,10 @@ export function template_li_list_category(categoria) {
 
 export function template_login_user_data(data_user) {
     return `<li class="nav-item">
-    <a class="nav-link" href="./data_user.html?id_user=${data_user.id}">${data_user.name}</a>
+    <a class="nav-link" href="./data_user.html?id_user=${data_user.id}">${data_user.nombre}</a>
 </li>
 <li class="nav-item">
-    <button class="nav-link" >Log out</button>
+    <button class="nav-link" id="btn-log-out">Log out</button>
 </li>`
 }
 
@@ -44,4 +44,21 @@ export function template_login_sing() {
 <li class="nav-item">
     <a class="nav-link" href="./sing_in.html">Sing in</a>
 </li>`
+}
+
+export function template_game_data(game_data) {
+    return `<div class="container-xxl mt-5 container-game" id="container-game-data">
+    <div class="cont-img-game">
+    <img src="${game_data.imagen}"
+        alt="${game_data.nombre}">
+</div>
+<div class="cont-game-data">
+    <h1 class="title-game ">${game_data.nombre}</h1>
+    <p class="description-game"><span class="atribut">Descripcion:</span> ${game_data.descripcion}</p>
+    <p class="category-game"><span class="atribut">Categoria:</span>: ${game_data.categoria}</p>
+    <p class="date-game"><span class="atribut">Fecha de Lanzamiento:</span> ${game_data.fecha_de_adicion}</p>
+    <p class="price-game"><span class="atribut">Precio:</span> <span class="span-price">$${game_data.precio}ARS</span></p>
+    <button class="btn-buy" id="btn-buy-game">Comprar</button>
+</div>
+</div>`
 }

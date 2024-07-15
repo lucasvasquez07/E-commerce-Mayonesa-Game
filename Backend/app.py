@@ -51,7 +51,7 @@ def get_all_games():
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 500
 
-@app.route("/juegos/id/<id>", methods=["GET"])
+@app.route("/juegos/id/<id_juego>", methods=["GET"])
 def get_by_id_game(id_juego):
     try:
         juego = Juego.query.get(int(id_juego))
@@ -130,7 +130,7 @@ def get_user_by_log_in():
         password = data.get('password')
 
         if not email or not password:
-            return jsonify({"message": "ERROR. Faltan datos obligatorios."}), 400
+            return jsonify({"message": "Faltan datos obligatorios."}), 400
 
         usuario = Usuario.query.filter((Usuario.mail == email) | (Usuario.name == email), Usuario.password == password).first()
 
@@ -143,11 +143,11 @@ def get_user_by_log_in():
             }
             return jsonify({"Usuario": usuario_data}), 200
         else:
-            return jsonify({"message": "ERROR. Alguno de los datos ingresados es incorrecto"}), 401
+            return jsonify({"message": "Alguno de los datos ingresados es incorrecto"}), 401
 
     except Exception as error:
         print("Error:", error)
-        return jsonify({"message": "ERROR. No se pudo procesar la solicitud."}), 500
+        return jsonify({"message": "No se pudo procesar la solicitud."}), 500
 
 
 @app.route("/usuarios/id/<int:id_usuario>", methods=["GET"])
@@ -159,7 +159,7 @@ def get_user_by_id(id_usuario):
                 "id": usuario.id,
                 "fecha_de_creacion": usuario.date,
                 "nombre": usuario.name,
-                "correo": usuario.mail
+                "email": usuario.mail
             }
             return jsonify({"usuario": usuario_data}), 200
         else:
@@ -178,23 +178,23 @@ def post_user_sign_in():
 
         # Validaciones básicas
         if not name or not password or not email:
-            return jsonify({"ERROR": "Faltan datos obligatorios."}), 400
+            return jsonify({"message": "Faltan datos obligatorios."}), 400
 
         if "@" not in email:
-            return jsonify({"ERROR": "El correo no es válido."}), 400
+            return jsonify({"message": "El correo no es válido."}), 400
 
         if "@" in name:
-            return jsonify({"ERROR": "El nombre no puede contener un @."}), 400
+            return jsonify({"message": "El nombre no puede contener un @."}), 400
 
         # Verifica si el nombre de usuario ya existe
         usuario_nombre = Usuario.query.filter(Usuario.name == name).first()
         if usuario_nombre:
-            return jsonify({"ERROR": "El nombre del usuario ya existe."}), 409
+            return jsonify({"message": "El nombre del usuario ya existe."}), 409
 
         # Verifica si el correo ya está vinculado a otra cuenta
         usuario_correo = Usuario.query.filter(Usuario.mail == email).first()
         if usuario_correo:
-            return jsonify({"ERROR": "El correo ya está vinculado a otra cuenta."}), 409
+            return jsonify({"message": "El correo ya está vinculado a otra cuenta."}), 409
 
         # Crea el nuevo usuario
         nuevo_usuario = Usuario(name=name, password=password, mail=email)
@@ -294,11 +294,10 @@ def post_game_buy():
         print("Error", error)
         return jsonify({"message": "Internal server error"}), 500
 
-@app.route("/data_user/user_games", methods=["GET"]) #Defino la ruta y es un meotodo POST para obtener los juegos comprados del usuario.
-def get_games_by_id_user():
+@app.route("/data_user/user_games/<int:id_usuario>", methods=["GET"]) #Defino la ruta y es un meotodo POST para obtener los juegos comprados del usuario.
+def get_games_by_id_user(id_usuario):
     try:
-        usuario_id = request.args.get("user_id")
-        juegos_comprados = JuegoUsuario.query.filter_by(id_user=usuario_id).all() #Juegos comprados por el usuario
+        juegos_comprados = JuegoUsuario.query.filter_by(id_user=id_usuario).all() #Juegos comprados por el usuario
         lista_juegos = []
         for juego_comprado in juegos_comprados:
             juego = Juego.query.filter_by(id=juego_comprado.id_game).first()

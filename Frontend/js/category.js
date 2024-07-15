@@ -3,46 +3,45 @@ import { get_by_category } from "./metodos_backend.js";
 import { create_template_card_game } from "./templates.js";
 
 function show_category(categoria) {
+    document.title = categoria
     const title_category = document.getElementById("t-category");
     title_category.innerText = `Categoria: ${categoria}`;
 }
 
+
 async function get_category_game() {
     const params = new URLSearchParams(window.location.search);
     const categoria = params.get("categoria");
-
-    console.log('Categoria:', categoria); // Verificar el valor de categoria
-
-    if (!categoria) {
-        console.error('No se ha proporcionado una categoría en la URL.');
-        return [];
-    }
-
-    show_category(categoria);
-
-    try {
-        const response = await get_by_category(categoria);
-        console.log('Respuesta del servidor:', response); // Verificar la respuesta del servidor
-        if (response && response.juego) {
+    const lista_categorias = ["accion", "aventura", "deportes", "fantasia", "multijugador", "samurais"]
+    if ((lista_categorias.includes(categoria))) {
+        show_category(categoria);
+        try {
+            const response = await get_by_category(categoria);
             return response.juego;
-        } else {
-            console.error('No se encontraron juegos o la respuesta no es válida.');
+        } catch (err) {
+            Swal.fire({
+                title: "Error del servidor",
+                text: "El servidor no esta funcionando correctamente",
+                icon: "error",
+                confirmButtonColor: '#DC001A'
+            });
             return [];
         }
-    } catch (err) {
-        console.error('Error al obtener los juegos por categoría:', err);
-        return [];
+    } else {
+        Swal.fire({
+            title: "Categoria Invalida o inexistente",
+            text: "La url ingresada es inexistente",
+            icon: "error",
+            confirmButtonColor: '#DC001A'
+        });
     }
 }
 
 window.addEventListener("load", async () => {
-    setTimeout(async () => {
-        const row_games = document.getElementById("list_games_home");
-        row_games.innerHTML = "";
-        const category_games = await get_category_game();
-        console.log('Juegos de la categoría:', category_games); // Verificar los juegos obtenidos
-        category_games.forEach((dict_juego) => {
-            row_games.appendChild(create_template_card_game(dict_juego));
-        });
-    }, 1500);
+    const row_games = document.getElementById("list_games_home");
+    row_games.innerHTML = "";
+    const category_games = await get_category_game();
+    category_games.forEach((dict_juego) => {
+        row_games.appendChild(create_template_card_game(dict_juego));
+    });
 });
