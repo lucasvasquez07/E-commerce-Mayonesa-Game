@@ -76,7 +76,7 @@ function get_data_form() {
     const nueva_contraseña = document.getElementById("pw-update").value
     const data_update = {}
     if (nuevo_nombre_usuario) {
-        data_update.nuevo_nombre_usuario = nuevo_nombre_usuario
+        data_update.nuevo_nombre = nuevo_nombre_usuario
     }
     if (nuevo_email) {
         data_update.nuevo_email = nuevo_email
@@ -87,15 +87,22 @@ function get_data_form() {
     return data_update
 }
 const btn_send_update = document.getElementById("btn-send-update")
-btn_send_update.addEventListener("click", (e) => {
+btn_send_update.addEventListener("click", async (e) => {
     e.preventDefault()
     try {
         const data_update = get_data_form()
         const id_user = get_id_params()
-        put_user_update(id_user, data_update)
-        // window.location.href = "./data_user.html?id_user=" + id_user
+        const response = await put_user_update(id_user, data_update);
+        if (response) {
+            window.location.href = "./data_user.html?id_user=" + id_user
+        }
     } catch (error) {
-
+        Swal.fire({
+            title: "Error del servidor",
+            text: "El servidor no esta funcionando correctamente",
+            icon: "error",
+            confirmButtonColor: '#DC001A'
+        });
     }
 
 })

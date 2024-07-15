@@ -249,6 +249,7 @@ def put_user_update(id_usuario):
         if nuevo_email:
             error_email = email_valido(nuevo_email)
             if error_email:
+                print(error_email)
                 return jsonify(error_email), 400
             
             error_email_unico = email_unico(nuevo_email, id_usuario)
@@ -261,7 +262,6 @@ def put_user_update(id_usuario):
             if error_contraseña:
                 return jsonify(error_contraseña), 400
             usuario_actualizar.password = nueva_contraseña
-
         db.session.commit()
         return jsonify({"message": "Usuario actualizado correctamente"}), 200
     except Exception as error:

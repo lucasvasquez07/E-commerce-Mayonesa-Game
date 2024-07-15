@@ -183,6 +183,7 @@ export function put_user_update(id, data) {
         .then(async response => {
             if (!response.ok) {
                 const error = await response.json()
+                console.log(error);
                 throw new Error(error["message"])
             }
             return response.json()
