@@ -57,6 +57,7 @@ btn_send_sing_in.addEventListener("click", async (event) => {
                 icon: "success",
                 confirmButtonColor: '#2FAA4B'
             });
+            window.location.href = "./index.html"
         } else {
             Swal.fire({
                 title: "Error Contraseña",

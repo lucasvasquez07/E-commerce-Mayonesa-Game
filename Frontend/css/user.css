@@ -1,0 +1,65 @@
+.container-data-user {
+    background-color: #2A475E;
+    color: white;
+    border-radius: 10px;
+}
+
+.sub-cont-data-user {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    height: 100%;
+}
+
+.icon-cont {
+    text-align: center;
+    font-size: 15rem;
+}
+
+.data-user-cont {
+    padding: 2rem;
+
+    p {
+        font-size: 2rem;
+    }
+
+    .atributo-user {
+        color: #77add1;
+    }
+}
+
+.update-user {
+    background-color: #2A475E;
+    color: white;
+    border-radius: 10px;
+}
+
+.btn-update {
+    height: 3rem;
+    background-color: #74af2200;
+    border: solid 2px #74AF22;
+    border-radius: 5px;
+    color: white;
+}
+
+.btn-update:hover {
+    background-color: #74AF22;
+}
+
+.btn-update:active {
+    transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+    .sub-cont-data-user {
+        grid-template-columns: none;
+    }
+
+    .icon-cont {
+        font-size: 10rem;
+    }
+
+    .data-user-cont p {
+        font-size: 1.5rem;
+    }
+}

@@ -215,16 +215,16 @@ def post_user_sign_in():
 
 def email_valido(nuevo_email):
     if "@" not in nuevo_email:
-        return {"ERROR": "El email no es válido"}
+        return {"message": "El email no es válido"}
     return None
 def email_unico(email, id_usuario):
     existe_email = Usuario.query.filter(Usuario.mail == email, Usuario.id != id_usuario).first()
     if existe_email:
-        return {"ERROR": "El email ya está en uso"}
+        return {"message": "El email ya está en uso"}
     return None 
 def validar_contraseña(contraseña):
-    if len(contraseña) < 8 or len(contraseña) > 15:
-        return {"ERROR": "La contraseña debe ser entre 8 y 15 caracteres"}
+    if len(contraseña) > 8 or len(contraseña) < 15:
+        return {"message": "La contraseña debe ser entre 8 y 15 caracteres"}
     return None
 
 @app.route("/data_user/<int:id_usuario>", methods=["PUT"])  # Actualizo el nombre de usuario, email, y contraseña

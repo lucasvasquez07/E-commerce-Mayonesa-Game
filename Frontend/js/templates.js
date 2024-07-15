@@ -30,7 +30,7 @@ export function template_li_list_category(categoria) {
 
 export function template_login_user_data(data_user) {
     return `<li class="nav-item">
-    <a class="nav-link" href="./data_user.html?id_user=${data_user.id}">${data_user.nombre}</a>
+    <a class="nav-link" href="./data_user.html?id_user=${data_user.id}"> <i class="fi fi-rs-circle-user"></i> ${data_user.nombre}</a>
 </li>
 <li class="nav-item">
     <button class="nav-link" id="btn-log-out">Log out</button>
@@ -44,6 +44,12 @@ export function template_login_sing() {
 <li class="nav-item">
     <a class="nav-link" href="./sing_in.html">Sing in</a>
 </li>`
+}
+
+export function template_data_user(usuario) {
+    return `<p><span class="atributo-user">Username:</span> ${usuario.nombre}</p>
+    <p><span class="atributo-user">Email:</span> ${usuario.email}</p>
+    <p><span class="atributo-user">Fecha de creación:</span> ${usuario.fecha_de_creacion}</p>`
 }
 
 export function template_game_data(game_data) {
