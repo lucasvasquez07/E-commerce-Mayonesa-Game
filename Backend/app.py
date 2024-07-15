@@ -79,7 +79,7 @@ def get_by_categoria(categoria):
         juegos_data = []
         if juegos:
             for juego in juegos:
-                if categoria in juego.category:
+                if categoria.lower() in juego.category.lower():
                     juego_data = {
                         "id": juego.id,
                         "fecha_de_adicion": juego.date,
