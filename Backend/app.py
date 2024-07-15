@@ -30,6 +30,22 @@ db.init_app(app)
 def hello_world():
     return 'Bienvenido a el backend de la pagina de MAYONESA'
 
+def validar_contraseña(contraseña):
+    if len(contraseña) < 8:
+        return {"message": "La contraseña debe contener un minimo de 8 caracteres"}
+    return None
+
+def email_valido(nuevo_email):
+    if "@" not in nuevo_email:
+        return {"message": "El email no es válido"}
+    return None
+
+def email_unico(email):
+    existe_email = Usuario.query.filter(Usuario.mail == email).first()
+    if existe_email:
+        return {"message": "El email ya está en uso"}
+    return None 
+
 @app.route("/juegos", methods=["GET"])
 def get_all_games():
     try:
@@ -185,16 +201,25 @@ def post_user_sign_in():
 
         if "@" in name:
             return jsonify({"message": "El nombre no puede contener un @."}), 400
+        
 
-        # Verifica si el nombre de usuario ya existe
-        usuario_nombre = Usuario.query.filter(Usuario.name == name).first()
-        if usuario_nombre:
-            return jsonify({"message": "El nombre del usuario ya existe."}), 409
+        usuario_existente = Usuario.query.filter(Usuario.name == name).first()
+        if usuario_existente:
+            return jsonify({"message": "Nombre de usuario ya en uso"}), 400
 
-        # Verifica si el correo ya está vinculado a otra cuenta
-        usuario_correo = Usuario.query.filter(Usuario.mail == email).first()
-        if usuario_correo:
-            return jsonify({"message": "El correo ya está vinculado a otra cuenta."}), 409
+        error_email = email_valido(email)
+        if error_email:
+            return jsonify(error_email), 400
+            
+        error_email_unico = email_unico(email)
+        if error_email_unico:
+            return jsonify(error_email_unico), 400
+
+
+        error_contraseña = validar_contraseña(password)
+        if error_contraseña:
+            return jsonify(error_contraseña), 400
+
 
         # Crea el nuevo usuario
         nuevo_usuario = Usuario(name=name, password=password, mail=email)
@@ -218,16 +243,11 @@ def email_valido(nuevo_email):
         return {"message": "El email no es válido"}
     return None
 
-def email_unico(email, id_usuario):
-    existe_email = Usuario.query.filter(Usuario.mail == email, Usuario.id != id_usuario).first()
+def email_unico(email):
+    existe_email = Usuario.query.filter(Usuario.mail == email).first()
     if existe_email:
         return {"message": "El email ya está en uso"}
     return None 
-
-def validar_contraseña(contraseña):
-    if len(contraseña) > 8 or len(contraseña) < 15:
-        return {"message": "La contraseña debe ser entre 8 y 15 caracteres"}
-    return None
 
 @app.route("/data_user/<int:id_usuario>", methods=["PUT"])  # Actualizo el nombre de usuario, email, y contraseña
 def put_user_update(id_usuario):
@@ -249,9 +269,10 @@ def put_user_update(id_usuario):
         if nuevo_email:
             error_email = email_valido(nuevo_email)
             if error_email:
+                print(error_email)
                 return jsonify(error_email), 400
             
-            error_email_unico = email_unico(nuevo_email, id_usuario)
+            error_email_unico = email_unico(nuevo_email)
             if error_email_unico:
                 return jsonify(error_email_unico), 400
             usuario_actualizar.mail = nuevo_email
@@ -278,10 +299,10 @@ def del_user(id_usuario):
             return jsonify({"message": "Usuario eliminado correctamente"}), 200
         else:
             return jsonify({"message": "Usuario no encontrado"}), 404
-
     except Exception as error:
-        print("Error", error)
+        print("Error al eliminar el usuario:", error)
         return jsonify({"message": "Internal server error"}), 500
+
 
 @app.route("/game_buy", methods=["POST"])  # Defino la ruta y es un metodo POST para crear una compra.
 def post_game_buy():
