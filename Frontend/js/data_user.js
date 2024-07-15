@@ -58,7 +58,6 @@ window.addEventListener("load", async () => {
     const id_user = get_id_params()
     if ((localStorage.getItem("id") == id_user) || (sessionStorage.getItem("id") == id_user)) {
         const data_user = await get_user_by_id(id_user)
-        console.log(data_user);
         data_user.usuario.fecha_de_creacion = data_user.usuario.fecha_de_creacion.slice(5, 16)
         const cont_data_user = document.getElementById("cont-data-user")
         cont_data_user.innerHTML = template_data_user(data_user.usuario)
