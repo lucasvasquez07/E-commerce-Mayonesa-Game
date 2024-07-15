@@ -42,14 +42,16 @@ export function template_login_sing() {
     <a class="nav-link" href="./login.html">Login</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="./sing_in.html">Sing in</a>
+    <a class="nav-link" href="./sing_in.html">Sign in</a>
 </li>`
 }
 
 export function template_data_user(usuario) {
     return `<p><span class="atributo-user">Username:</span> ${usuario.nombre}</p>
     <p><span class="atributo-user">Email:</span> ${usuario.email}</p>
-    <p><span class="atributo-user">Fecha de creación:</span> ${usuario.fecha_de_creacion}</p>`
+    <p><span class="atributo-user">Fecha de creación:</span> ${usuario.fecha_de_creacion}</p>
+    <button class="btn-del-user" id="btn-del-user">Borrar Cuenta</button>
+    `
 }
 
 export function template_game_data(game_data) {

@@ -16,6 +16,21 @@
     font-size: 15rem;
 }
 
+.btn-del-user {
+    background-color: #DC001A;
+    border: none;
+    border-radius: 5px;
+    padding: 0.6rem;
+}
+
+.btn-del-user:hover {
+    background-color: #960011;
+}
+
+.btn-del-user:active {
+    transform: scale(1.05);
+}
+
 .data-user-cont {
     padding: 2rem;
 

@@ -43,16 +43,16 @@ btn_send_login.addEventListener("click", async (event) => {
                 confirmButtonColor: '#ffc107'
             });
         } else {
-            const { usuario } = await get_by_email(data_user_login.email, data_user_login.password)
-            if (!("message" in usuario)) {
+            const user = await get_by_email(data_user_login.email, data_user_login.password)
+            if (user) {
                 const remember_box = document.getElementById("remember-box")
                 if (remember_box.checked) {
                     sessionStorage.removeItem("id")
-                    localStorage.setItem("id", usuario.id)
+                    localStorage.setItem("id", user.usuario.id)
                 }
                 else {
                     localStorage.removeItem("id")
-                    sessionStorage.setItem("id", usuario.id)
+                    sessionStorage.setItem("id", user.usuario.id)
                 }
                 window.location.href = "./index.html"
             } else {

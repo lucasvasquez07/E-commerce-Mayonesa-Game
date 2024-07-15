@@ -223,7 +223,7 @@ def email_unico(email, id_usuario):
         return {"message": "El email ya está en uso"}
     return None 
 def validar_contraseña(contraseña):
-    if len(contraseña) > 8 or len(contraseña) < 15:
+    if len(contraseña) < 8 or len(contraseña) > 15:
         return {"message": "La contraseña debe ser entre 8 y 15 caracteres"}
     return None
 

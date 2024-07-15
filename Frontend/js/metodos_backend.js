@@ -102,6 +102,7 @@ export function get_by_email(email, password) {
         .then(async response => {
             if (!response.ok) {
                 const error = await response.json()
+                console.log(error["message"]);
                 throw new Error(error["message"])
             }
             return response.json()
@@ -169,6 +170,8 @@ export function post_user_sign_in(email, password, name) {
 
 
 export function put_user_update(id, data) {
+    console.log(id);
+    console.log(data);
     const url = "http://localhost:5000/data_user/" + id
     return fetch(url, {
         method: 'PUT',
